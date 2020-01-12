@@ -3,11 +3,11 @@ game
 
 This project implements the game of Breakout.
 
-Name: 
+Name: Tyler Meier, tkm22
 
 ### Timeline
 
-Start Date: 
+Start Date: January 12th, 2020
 
 Finish Date: 
 
