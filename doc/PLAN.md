@@ -102,3 +102,12 @@ one "F" that just brings you back to the first level. I'm sure I might
 think of more though.
 
 ### Something Extra
+One thing that is extra that I might add is that every so often (either
+random or certain amount of time) the paddle disappears and the user will
+have to press a key to make it come back. This makes the game a 
+little more challenging and if the user forgets about this it could lead
+to them losing a life. I like this addition because it just means the user
+has one more thing to think about and make sure they are paying attention to.
+I might also instead do a special power up that causes the 
+bricks to start moving around the screen instead of standing still. This again
+makes the game slightly harder/ more fun and interesting to play. 
