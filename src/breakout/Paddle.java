@@ -1,4 +1,4 @@
 package breakout;
 
-public class Paddle {
+public class Paddle extends Main {
 }

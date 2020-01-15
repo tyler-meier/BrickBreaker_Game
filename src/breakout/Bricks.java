@@ -1,4 +1,4 @@
 package breakout;
 
-public class Bricks {
+public class Bricks extends Main {
 }
