@@ -28,6 +28,7 @@ public class Main extends Application {
     private Scene myScene;
     private Bouncer myBouncer;
     private Paddle myPaddle;
+    private Brick1 myBrick1;
 
 
     /**
@@ -57,10 +58,12 @@ public class Main extends Application {
         // make some shapes and set their properties
         myBouncer = new Bouncer(width, height);
         myPaddle = new Paddle(width, height);
+        myBrick1 = new Brick1(width, height);
 
         // order added to the group is the order in which they are drawn
         root.getChildren().add(myBouncer.getView());
         root.getChildren().add(myPaddle.getView());
+        root.getChildren().add(myBrick1.getView());
 
         // create a place to see the shapes
         Scene scene = new Scene(root, width, height, background);
