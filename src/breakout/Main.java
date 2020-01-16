@@ -78,8 +78,8 @@ public class Main extends Application {
         // update "actors" attributes
         myBouncer.move(elapsedTime);
 
-        //bounce off of all walls except bottom and paddle
-        myBouncer.bounce(myScene.getWidth(), myScene.getHeight(), myPaddle);
+        //bounce off of all walls except bottom and paddle and bricks
+        myBouncer.bounce(myScene.getWidth(), myScene.getHeight(), myPaddle, myBrick1);
 
         //
 

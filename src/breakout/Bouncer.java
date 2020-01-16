@@ -11,6 +11,9 @@ public class Bouncer extends Main {
     public static final String BOUNCER_IMAGE = "ball.gif";
     public static final int BOUNCER_MINIMUM_SPEED = 70;
     public static final int BOUNCER_MAXIMUM_SPEED = 90;
+    public static final int BOUNCER_WIDTH = 20;
+    public static final int BOUNCER_HEIGHT = 20;
+
 
     private Random dice = new Random();
     private ImageView myBouncer;
@@ -18,6 +21,8 @@ public class Bouncer extends Main {
 
     public Bouncer (int width, int height) {
         myBouncer = new ImageView(BOUNCER_IMAGE);
+        myBouncer.setFitWidth(BOUNCER_WIDTH);
+        myBouncer.setFitHeight(BOUNCER_HEIGHT);
 
         // turn speed into velocity that can be updated on bounces
         myVelocity = new Point2D(getRandomInRange(BOUNCER_MINIMUM_SPEED, BOUNCER_MAXIMUM_SPEED),
@@ -41,7 +46,7 @@ public class Bouncer extends Main {
     /**
      * Bounce off the walls represented by the edges of the screen.
      */
-    public void bounce (double screenWidth, double screenHeight, Paddle myPaddle) {
+    public void bounce (double screenWidth, double screenHeight, Paddle myPaddle, Brick1 myBrick) {
         // collide all bouncers against the walls except bottom
         if (myBouncer.getX() < 0 || myBouncer.getX() > screenWidth - myBouncer.getBoundsInLocal().getWidth()) {
             myVelocity = new Point2D(-myVelocity.getX(), myVelocity.getY());
@@ -56,6 +61,13 @@ public class Bouncer extends Main {
         if(ivBouncer.intersects(ivPaddle)){
             myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
         }
+
+        //check if hits any brick
+        Bounds ivBrick1 = myBrick.getView().getBoundsInParent();
+        if(ivBouncer.intersects(ivBrick1)){
+            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
+        }
+
     }
 
     /**
