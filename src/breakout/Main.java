@@ -13,7 +13,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
+import java.io.FileNotFoundException;
 
 
 public class Main extends Application {
@@ -35,7 +35,7 @@ public class Main extends Application {
      * Initialize what will be displayed and how it will be updated.
      */
     @Override
-    public void start (Stage stage) {
+    public void start (Stage stage) throws FileNotFoundException {
         // attach scene to the stage and display it
         myScene = setupGame(SIZE, SIZE, BACKGROUND);
         stage.setScene(myScene);
@@ -51,7 +51,7 @@ public class Main extends Application {
     }
 
     // Create the game's "scene": what shapes will be in the game and their starting properties
-    private Scene setupGame (int width, int height, Paint background) {
+    private Scene setupGame (int width, int height, Paint background) throws FileNotFoundException {
         // create one top level collection to organize the things in the scene
         Group root = new Group();
 
