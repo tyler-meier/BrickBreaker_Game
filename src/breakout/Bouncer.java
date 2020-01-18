@@ -30,7 +30,7 @@ public class Bouncer extends Main {
 
         // x and y represent the top left corner, so center it in window
         myBouncer.setX(width / 2 - myBouncer.getBoundsInLocal().getWidth() / 2);
-        myBouncer.setY(height / 2 - myBouncer.getBoundsInLocal().getHeight() / 2);
+        myBouncer.setY(height - 100);
     }
 
     /**
@@ -46,7 +46,7 @@ public class Bouncer extends Main {
     /**
      * Bounce off the walls represented by the edges of the screen.
      */
-    public void bounce (double screenWidth, double screenHeight, Paddle myPaddle, Brick1 myBrick) {
+    public void bounce (double screenWidth, double screenHeight, Paddle myPaddle) {
         // collide all bouncers against the walls except bottom
         if (myBouncer.getX() < 0 || myBouncer.getX() > screenWidth - myBouncer.getBoundsInLocal().getWidth()) {
             myVelocity = new Point2D(-myVelocity.getX(), myVelocity.getY());
@@ -62,18 +62,23 @@ public class Bouncer extends Main {
             myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
         }
 
-        //check if hits any brick
+
+    }
+    public boolean hitBrick(Brick1 myBrick){
+        Bounds ivBouncer = myBouncer.getBoundsInParent();
         Bounds ivBrick1 = myBrick.getView().getBoundsInParent();
         if(ivBouncer.intersects(ivBrick1)){
             myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
+            return true;
         }
-
+        return false;
     }
 
     /**
      * Returns internal view of bouncer to interact with other JavaFX methods.
      */
     public Node getView () {
+
         return myBouncer;
     }
 

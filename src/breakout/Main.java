@@ -8,12 +8,18 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.control.Button;
+import java.awt.*;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 
 public class Main extends Application {
@@ -25,10 +31,12 @@ public class Main extends Application {
     public static final Paint BACKGROUND = Color.AZURE;
 
 
-    private Scene myScene;
+    private Scene myScene, startScene;
+    private Stage myStage;
     private Bouncer myBouncer;
     private Paddle myPaddle;
     private Brick1 myBrick1;
+    private ArrayList<Brick1> myBricks;
 
 
     /**
@@ -37,10 +45,13 @@ public class Main extends Application {
     @Override
     public void start (Stage stage) throws FileNotFoundException {
         // attach scene to the stage and display it
+        myStage = stage;
+        startScene = setupStart(SIZE, SIZE, BACKGROUND);
         myScene = setupGame(SIZE, SIZE, BACKGROUND);
-        stage.setScene(myScene);
-        stage.setTitle(TITLE);
-        stage.show();
+        myStage.setScene(startScene);
+        myStage.setScene(myScene);
+        myStage.setTitle(TITLE);
+        myStage.show();
 
         // attach "game loop" to timeline to play it (basically just calling step() method repeatedly forever)
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY));
@@ -48,6 +59,21 @@ public class Main extends Application {
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
+    }
+    private Scene setupStart (int width, int height, Paint background){
+        Group root = new Group();
+
+        Text text = new Text();
+        text.setText("Welcome to the GAMMMMEEEE");
+        text.setX(SIZE/2);
+        text.setY(SIZE/2);
+
+        Button seeRules = new Button("Click to see rules");
+
+        root.getChildren().add(seeRules);
+        Scene scene1 = new Scene(root, width, height, background);
+
+        return scene1;
     }
 
     // Create the game's "scene": what shapes will be in the game and their starting properties
@@ -58,12 +84,18 @@ public class Main extends Application {
         // make some shapes and set their properties
         myBouncer = new Bouncer(width, height);
         myPaddle = new Paddle(width, height);
-        myBrick1 = new Brick1(width, height);
+        myBrick1 = new Brick1();
+        myBrick1.createArrayBrick();
+        myBricks = myBrick1.setPositionBrick();
+        for(int i=0; i < myBricks.size(); i++){
+            Brick1 thisBrick = myBricks.get(i);
+            root.getChildren().add(thisBrick.getView());
+        }
+
 
         // order added to the group is the order in which they are drawn
         root.getChildren().add(myBouncer.getView());
         root.getChildren().add(myPaddle.getView());
-        root.getChildren().add(myBrick1.getView());
 
         // create a place to see the shapes
         Scene scene = new Scene(root, width, height, background);
@@ -79,14 +111,20 @@ public class Main extends Application {
         myBouncer.move(elapsedTime);
 
         //bounce off of all walls except bottom and paddle and bricks
-        myBouncer.bounce(myScene.getWidth(), myScene.getHeight(), myPaddle, myBrick1);
+        myBouncer.bounce(myScene.getWidth(), myScene.getHeight(), myPaddle);
 
-        //
-
+        for (int i=0; i < myBricks.size(); i++){
+            Brick1 thisBrick = myBricks.get(i);
+            if (myBouncer.hitBrick(thisBrick)){
+                thisBrick.brickRemove(thisBrick.getView());
+                myBricks.remove(thisBrick);
+            }
+        }
     }
 
     private void handleKeyInput(KeyCode code){
         myPaddle.move(code, myScene.getWidth());
+
     }
 
     public static void main (String[] args) { launch(args); }
