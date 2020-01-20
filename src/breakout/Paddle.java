@@ -1,6 +1,5 @@
 package breakout;
 
-import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
@@ -9,6 +8,7 @@ public class Paddle extends Main {
     public static final int PADDLE_SPEED = 25;
     public static final int SMALL_PADDLE = 30;
     public static final int MEDIUM_PADDLE = 40;
+    public static final int NORMAL_PADDLE = 55;
 
     private ImageView myPaddle;
 
@@ -34,6 +34,9 @@ public class Paddle extends Main {
 
     public void mediumPaddle(){
         myPaddle.setFitWidth((MEDIUM_PADDLE));
+    }
+    public void normalPaddle(){
+        myPaddle.setFitWidth(NORMAL_PADDLE);
     }
 
 

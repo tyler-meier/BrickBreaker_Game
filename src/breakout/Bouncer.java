@@ -3,7 +3,6 @@ package breakout;
 import java.util.Random;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 
 
@@ -63,30 +62,46 @@ public class Bouncer extends Main {
     /**
      * Bounce off the walls represented by the edges of the screen.
      */
-    public void bounce (int screenWidth, int screenHeight, Paddle myPaddle) {
+    public void bounce (int screenWidth, int screenHeight) {
         // collide all bouncers against the walls except bottom
         if (myBouncer.getX() < 0 || myBouncer.getX() > screenWidth - myBouncer.getBoundsInLocal().getWidth()) {
             myVelocity = new Point2D(-myVelocity.getX(), myVelocity.getY());
         }
-        if (myBouncer.getY() < 0) {
+        if (myBouncer.getY() < 30) {
             myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
         }
         if (myBouncer.getY() > screenHeight){
             lives --;
             resetBouncer(screenWidth, screenHeight);
         }
-        //check if hits paddle
+    }
+    public void hitPaddle(Paddle myPaddle){
         Bounds ivBouncer = myBouncer.getBoundsInParent();
         Bounds ivPaddle = myPaddle.getView().getBoundsInParent();
-        if(ivBouncer.intersects(ivPaddle)){
+        if(ivBouncer.intersects(ivPaddle)) {
             myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
         }
     }
 
-    public boolean hitBrick(Brick1 myBrick){
+    public boolean hitBrick(Brick myBrick){
         Bounds ivBouncer = myBouncer.getBoundsInParent();
-        Bounds ivBrick1 = myBrick.getView().getBoundsInParent();
+        Bounds ivBrick1 = myBrick.getView1().getBoundsInParent();
+        Bounds ivBrick2 = myBrick.getView2().getBoundsInParent();
+        Bounds ivBrick3 = myBrick.getView3().getBoundsInParent();
+        Bounds ivBrick4 = myBrick.getView4().getBoundsInParent();
         if(ivBouncer.intersects(ivBrick1)){
+            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
+            return true;
+        }
+        else if(ivBouncer.intersects(ivBrick2)){
+            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
+            return true;
+        }
+        else if(ivBouncer.intersects(ivBrick3)){
+            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
+            return true;
+        }
+        else if(ivBouncer.intersects(ivBrick4)){
             myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
             return true;
         }
@@ -97,7 +112,6 @@ public class Bouncer extends Main {
      * Returns internal view of bouncer to interact with other JavaFX methods.
      */
     public ImageView getView () {
-
         return myBouncer;
     }
 
