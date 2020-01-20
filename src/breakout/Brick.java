@@ -6,6 +6,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * This class creates the bricks used in each level and
+ * all of their properties
+ *
+ * @author Tyler Meier, tkm22
+ */
 public class Brick extends Main {
     public static final String BRICK_IMAGE1 = "brick1.gif";
     public static final String BRICK_IMAGE2 = "brick2.gif";
@@ -19,6 +25,10 @@ public class Brick extends Main {
     private ImageView myBrick1, myBrick2, myBrick3, myBrick4;
     private File file1;
 
+    /**
+     * Creates the constructor for the brick, creating an imageview for each
+     * different type of brick and setting it to be a different image
+     */
     public Brick() {
         Image brickImage1 = new Image(getClass().getClassLoader().getResourceAsStream(BRICK_IMAGE1));
         myBrick1 = new ImageView(brickImage1);
@@ -41,6 +51,11 @@ public class Brick extends Main {
         myBrick4.setFitHeight(BRICK_HEIGHT1);
     }
 
+    /**
+     * reads in a file depending on what level it is and creates an
+     * arraylist of the positions and type of strength that the brick will be
+     * @param level
+     */
     public void createArrayBrick(int level) {
         if (level == 1){
             file1 = new File("/Users/tylermeier/Documents/comp308 workspace/game_tkm22/resources/lvl01");
@@ -66,6 +81,11 @@ public class Brick extends Main {
 
     }
 
+    /**
+     * Creates an array list of all the bricks at their set positions
+     * and of  their  set strengths / different colors
+     * @return the arrayList
+     */
     public ArrayList<Brick> setPositionBrick(){
 
         for (int i = 0; i < positions.size(); i ++){
@@ -96,18 +116,41 @@ public class Brick extends Main {
         }
         return brickArray;
     }
+
+    /**
+     * removes a brick when it is hit by the bouncer
+     * @param thisBrick
+     */
     public void brickRemove(ImageView thisBrick){
         thisBrick.setImage(null);
     }
+
+    /**
+     * @return internal view of first type of brick to interact with other JavaFX methods.
+     */
     public ImageView getView1 () {
         return this.myBrick1;
     }
+
+    /**
+     * @return internal view of second type of brick to interact with other JavaFX methods.
+     */
     public ImageView getView2 () {
         return this.myBrick2;
     }
+
+    /**
+     *
+     * @return internal view of third type of brick to interact with other JavaFX methods.
+     */
     public ImageView getView3 () {
         return this.myBrick3;
     }
+
+    /**
+     *
+     * @return internal view of fourth type of brick to interact with other JavaFX methods.
+     */
     public ImageView getView4 () {
         return this.myBrick4;
     }

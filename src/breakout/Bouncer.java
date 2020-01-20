@@ -5,7 +5,12 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
 
-
+/**
+ * This class creates the bouncer(ball) and all of the properties
+ * of it are in this class
+ *
+ * @author Tyler Meier, tkm22
+ */
 public class Bouncer extends Main {
     public static final String BOUNCER_IMAGE = "ball.gif";
     public static final int BOUNCER_MINIMUM_SPEED = 70;
@@ -21,6 +26,13 @@ public class Bouncer extends Main {
     private Point2D myVelocity;
     private Integer lives = 3;
 
+    /**
+     * constructor for the bouncer, creates the bouncer and sets its size
+     * sets the speed to a velocity for a range
+     * sets its starting position
+     * @param width
+     * @param height
+     */
     public Bouncer (int width, int height) {
         myBouncer = new ImageView(BOUNCER_IMAGE);
         myBouncer.setFitWidth(BOUNCER_WIDTH);
@@ -34,16 +46,34 @@ public class Bouncer extends Main {
         myBouncer.setX(width / 2 - myBouncer.getBoundsInLocal().getWidth() / 2);
         myBouncer.setY(height - 100);
     }
+
+    /**
+     * resets the bouncer to its original position
+     * @param width
+     * @param height
+     */
     public void resetBouncer(int width, int height){
         myBouncer.setX(width / 2 - myBouncer.getBoundsInLocal().getWidth() / 2);
         myBouncer.setY(height - 100);
     }
+
+    /**
+     * adds an extra life to the player
+     */
     public void addLife(){
         lives ++;
     }
+
+    /**
+     * @returns the current lives of the player
+     */
     public Integer lives(){
         return this.lives;
     }
+
+    /**
+     * Speeds up the bouncer during level 2 and 3
+     */
     public void speedUp(){
         myVelocity = new Point2D(getRandomInRange(BOUNCER_MINIMUM_HIGHSPEED, BOUNCER_MAXIMUM_HIGHSPEED),
                 getRandomInRange(BOUNCER_MINIMUM_HIGHSPEED, BOUNCER_MAXIMUM_HIGHSPEED));
@@ -53,6 +83,7 @@ public class Bouncer extends Main {
      * Move by taking one step based on its velocity.
      *
      * Note, elapsedTime is used to ensure consistent speed across different machines.
+     * @param elapsedTime
      */
     public void move (double elapsedTime) {
         myBouncer.setX(myBouncer.getX() + myVelocity.getX() * elapsedTime);
@@ -60,10 +91,11 @@ public class Bouncer extends Main {
     }
 
     /**
-     * Bounce off the walls represented by the edges of the screen.
+     * Allows the bouncer to bounce off all of the walls except for the bottom one
+     * @param screenWidth
+     * @param screenHeight
      */
     public void bounce (int screenWidth, int screenHeight) {
-        // collide all bouncers against the walls except bottom
         if (myBouncer.getX() < 0 || myBouncer.getX() > screenWidth - myBouncer.getBoundsInLocal().getWidth()) {
             myVelocity = new Point2D(-myVelocity.getX(), myVelocity.getY());
         }
@@ -75,6 +107,12 @@ public class Bouncer extends Main {
             resetBouncer(screenWidth, screenHeight);
         }
     }
+
+    /**
+     * If the bouncer at any point hits the paddle, change the direction of the bouncer
+     * to bounce back up towards the bricks
+     * @param myPaddle
+     */
     public void hitPaddle(Paddle myPaddle){
         Bounds ivBouncer = myBouncer.getBoundsInParent();
         Bounds ivPaddle = myPaddle.getView().getBoundsInParent();
@@ -83,6 +121,11 @@ public class Bouncer extends Main {
         }
     }
 
+    /**
+     * Boolean method that tells when the ball hits any of the bricks, and then changes direction if it does
+     * @param myBrick
+     * @return true if it hits one of the bricks
+     */
     public boolean hitBrick(Brick myBrick){
         Bounds ivBouncer = myBouncer.getBoundsInParent();
         Bounds ivBrick1 = myBrick.getView1().getBoundsInParent();
@@ -115,7 +158,12 @@ public class Bouncer extends Main {
         return myBouncer;
     }
 
-    // Returns an "interesting", non-zero random value in the range (min, max)
+    /**
+     * Returns an "interesting", non-zero random value in the range (min, max)
+     * @param min
+     * @param max
+     * @return random value
+     */
     private int getRandomInRange (int min, int max) {
         return min + dice.nextInt(max - min) + 1;
     }

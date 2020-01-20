@@ -17,6 +17,11 @@ import javafx.event.ActionEvent;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+/**
+ * Breakout: a brick breaker game
+ *
+ * @author Tyler Meier, tkm22
+ */
 
 public class Main extends Application {
     public static final String TITLE = "Tyler's Breakout";
@@ -47,7 +52,9 @@ public class Main extends Application {
 
 
     /**
-     * Initialize what will be displayed and how it will be updated.
+     * Initializes what will be displayed and how to display it
+     * @param stage
+     * @throws FileNotFoundException
      */
     @Override
     public void start (Stage stage) throws FileNotFoundException {
@@ -89,6 +96,16 @@ public class Main extends Application {
         myStage.setTitle(TITLE);
         myStage.show();
     }
+
+    /**
+     * Sets up the start scene, or the scene that first shows up
+     * at the beginning of the game, that introduces the game and has a button
+     * to take you to the next scene
+     * @param width, SIZE
+     * @param height, SIZE
+     * @param background
+     * @return the scene to be used
+     */
     private Scene setupStart (int width, int height, Paint background){
         Group root = new Group();
 
@@ -108,6 +125,15 @@ public class Main extends Application {
 
         return scene1;
     }
+
+    /**
+     * Sets up the rules scene, or the scene after the start scene, that explains
+     * the rules for the game and has a button to press for the next scene
+     * @param width, SIZE
+     * @param height, SIZE
+     * @param background
+     * @return the scene to be used
+     */
     private Scene setupRules (int width, int height, Paint background){
         Group root = new Group();
 
@@ -139,7 +165,16 @@ public class Main extends Application {
         return scene2;
     }
 
-    // Create the game's "scene": what shapes will be in the game and their starting properties
+    /**
+     * Creates the game's main playing scene: which shapes/images will be in it and
+     * some of their starting properties
+     * @param width
+     * @param height
+     * @param background
+     * @param level
+     * @return the scene to be used
+     * @throws FileNotFoundException
+     */
     private Scene setupGame (int width, int height, Paint background, int level) throws FileNotFoundException {
         // create one top level collection to organize the things in the scene
         Group root = new Group();
@@ -201,6 +236,14 @@ public class Main extends Application {
         return scene;
     }
 
+    /**
+     * Sets up the end scene, or the scene that pops up if you win
+     * the game
+     * @param width, SIZE
+     * @param height, SIZE
+     * @param background
+     * @return the scene to be used
+     */
     private Scene setupEnd(int width, int height, Paint background){
         Group root = new Group();
 
@@ -216,6 +259,14 @@ public class Main extends Application {
         return sceneEnd;
     }
 
+    /**
+     * Sets up the scene that is displayed if you lose all of your lives
+     * and you lose the game
+     * @param width
+     * @param height
+     * @param background
+     * @return the scene to be used
+     */
     private Scene setupGameOver( int width, int height, Paint background){
         Group root = new Group();
 
@@ -232,6 +283,12 @@ public class Main extends Application {
 
     }
 
+    /**
+     * updates all of the attributes of the game, basically sets all of the
+     * things that happen in the game and what to do if things change
+     * @param elapsedTime
+     * @throws FileNotFoundException
+     */
     private void step (double elapsedTime) throws FileNotFoundException {
         // update "actors" attributes
         myBouncer.move(elapsedTime);
@@ -295,6 +352,12 @@ public class Main extends Application {
 
     }
 
+    /**
+     * handles what happens when certain keys are pressed, contains
+     * all of the cheat codes that were added to the game
+     * @param code
+     * @throws FileNotFoundException
+     */
     private void handleKeyInput(KeyCode code) throws FileNotFoundException {
         myPaddle.move(code, myScene.getWidth());
 
@@ -330,5 +393,9 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * starts the game
+     * @param args
+     */
     public static void main (String[] args) { launch(args); }
 }
