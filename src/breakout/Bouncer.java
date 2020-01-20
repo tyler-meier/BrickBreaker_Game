@@ -32,6 +32,10 @@ public class Bouncer extends Main {
         myBouncer.setX(width / 2 - myBouncer.getBoundsInLocal().getWidth() / 2);
         myBouncer.setY(height - 100);
     }
+    public void resetBouncer(int width, int height){
+        myBouncer.setX(width / 2 - myBouncer.getBoundsInLocal().getWidth() / 2);
+        myBouncer.setY(height - 100);
+    }
 
     /**
      * Move by taking one step based on its velocity.
@@ -46,13 +50,17 @@ public class Bouncer extends Main {
     /**
      * Bounce off the walls represented by the edges of the screen.
      */
-    public void bounce (double screenWidth, double screenHeight, Paddle myPaddle) {
+    public void bounce (int screenWidth, int screenHeight, Paddle myPaddle, int lives) {
         // collide all bouncers against the walls except bottom
         if (myBouncer.getX() < 0 || myBouncer.getX() > screenWidth - myBouncer.getBoundsInLocal().getWidth()) {
             myVelocity = new Point2D(-myVelocity.getX(), myVelocity.getY());
         }
         if (myBouncer.getY() < 0) {
             myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
+        }
+        if (myBouncer.getY() > screenHeight){
+            resetBouncer(screenWidth, screenHeight);
+            lives --;
         }
 
         //check if hits paddle
@@ -77,7 +85,7 @@ public class Bouncer extends Main {
     /**
      * Returns internal view of bouncer to interact with other JavaFX methods.
      */
-    public Node getView () {
+    public ImageView getView () {
 
         return myBouncer;
     }

@@ -14,6 +14,7 @@ public class Brick1 extends Main {
     public ArrayList<String> positions = new ArrayList<String>();
     public ArrayList<Brick1> brickArray = new ArrayList<Brick1>();
     private ImageView myBrick1;
+    private File file1;
 
     public Brick1() {
         Image brickImage = new Image(getClass().getClassLoader().getResourceAsStream(BRICK_IMAGE1));
@@ -22,8 +23,16 @@ public class Brick1 extends Main {
         myBrick1.setFitHeight(BRICK_HEIGHT1);
     }
 
-    public void createArrayBrick() {
-        File file1 = new File("/Users/tylermeier/Documents/comp308 workspace/game_tkm22/resources/lvl01");
+    public void createArrayBrick(int level) {
+        if (level == 1){
+            file1 = new File("/Users/tylermeier/Documents/comp308 workspace/game_tkm22/resources/lvl01");
+        }
+        if (level == 2){
+            file1 = new File("/Users/tylermeier/Documents/comp308 workspace/game_tkm22/resources/lvl02");
+        }
+        if (level == 3){
+            file1 = new File("/Users/tylermeier/Documents/comp308 workspace/game_tkm22/resources/lvl03");
+        }
 
         try {
             Scanner scn = new Scanner(file1);
