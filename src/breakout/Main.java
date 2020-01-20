@@ -37,7 +37,6 @@ public class Main extends Application {
     private ArrayList<Brick1> myBricks;
     private Button rulesButton, startGameButton;
     private int level = 1;
-    private int lives = 3;
     private int score = 0;
 
 
@@ -50,7 +49,6 @@ public class Main extends Application {
         myStage = stage;
         startScene = setupStart(SIZE, SIZE, BACKGROUND);
         rulesScene = setupRules(SIZE, SIZE, BACKGROUND);
-        myScene = setupGame(SIZE, SIZE, BACKGROUND, level);
         myStage.setScene(startScene);
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)
@@ -62,26 +60,28 @@ public class Main extends Application {
         EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e)
             {
+                try {
+                    myScene = setupGame(SIZE, SIZE, BACKGROUND, level);
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
                 myStage.setScene(myScene);
+                KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e2 -> {
+                    try {
+                        step(SECOND_DELAY);
+                    } catch (FileNotFoundException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+                Timeline animation = new Timeline();
+                animation.setCycleCount(Timeline.INDEFINITE);
+                animation.getKeyFrames().add(frame);
+                animation.play();
             }
         };
         startGameButton.setOnAction(event2);
-       // myStage.setScene(myScene);
         myStage.setTitle(TITLE);
         myStage.show();
-
-        // attach "game loop" to timeline to play it (basically just calling step() method repeatedly forever)
-        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> {
-            try {
-                step(SECOND_DELAY);
-            } catch (FileNotFoundException ex) {
-                ex.printStackTrace();
-            }
-        });
-        Timeline animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.play();
     }
     private Scene setupStart (int width, int height, Paint background){
         Group root = new Group();
@@ -137,9 +137,11 @@ public class Main extends Application {
         myPaddle = new Paddle(width, height);
         if (level == 2){
             myPaddle.mediumPaddle();
+            myBouncer.speedUp();
         }
         if (level == 3){
             myPaddle.smallPaddle();
+            myBouncer.speedUp();
         }
         myBrick1 = new Brick1();
         myBrick1.createArrayBrick(level);
@@ -204,11 +206,10 @@ public class Main extends Application {
         myBouncer.move(elapsedTime);
 
         //bounce off of all walls except bottom and paddle
-        myBouncer.bounce(SIZE, SIZE, myPaddle, lives);
-        //lives = liv;
+        myBouncer.bounce(SIZE, SIZE, myPaddle);
 
         //if lives = 0, end game
-        if (lives == 0){
+        if (myBouncer.lives() == 0){
             myScene = setupGameOver(SIZE, SIZE, BACKGROUND);
             myStage.setScene(myScene);
         }
@@ -256,7 +257,7 @@ public class Main extends Application {
             myBouncer.resetBouncer(SIZE, SIZE);
         }
         if (code == KeyCode.L){
-            lives ++;
+            myBouncer.addLife();
         }
         if (code == KeyCode.W){
             myScene = setupEnd(SIZE, SIZE, BACKGROUND);
