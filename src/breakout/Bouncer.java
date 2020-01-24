@@ -19,7 +19,7 @@ public class Bouncer extends Main {
     public static final int BOUNCER_MAXIMUM_HIGHSPEED = 110;
     public static final int BOUNCER_WIDTH = 20;
     public static final int BOUNCER_HEIGHT = 20;
-
+    public static final int TOP_OF_SCREEN = 30;
 
     private Random dice = new Random();
     private ImageView myBouncer;
@@ -42,9 +42,38 @@ public class Bouncer extends Main {
         myVelocity = new Point2D(getRandomInRange(BOUNCER_MINIMUM_SPEED, BOUNCER_MAXIMUM_SPEED),
                 getRandomInRange(BOUNCER_MINIMUM_SPEED, BOUNCER_MAXIMUM_SPEED));
 
-        // x and y represent the top left corner, so center it in window
         myBouncer.setX(width / 2 - myBouncer.getBoundsInLocal().getWidth() / 2);
         myBouncer.setY(height - 100);
+    }
+
+    /**
+     * Allows the bouncer to bounce off all of the walls except for the bottom one
+     * and stops at the top before hitting the top of the scene
+     * @param screenWidth
+     * @param screenHeight
+     */
+    public void bounce (int screenWidth, int screenHeight) {
+        if (myBouncer.getX() < 0 || myBouncer.getX() > screenWidth - myBouncer.getBoundsInLocal().getWidth()) {
+            myVelocity = new Point2D(-myVelocity.getX(), myVelocity.getY());
+        }
+        if (myBouncer.getY() < TOP_OF_SCREEN) {
+            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
+        }
+        if (myBouncer.getY() > screenHeight){
+            lives --;
+            resetBouncer(screenWidth, screenHeight);
+        }
+    }
+
+    /**
+     * Move by taking one step based on its velocity.
+     *
+     * Note, elapsedTime is used to ensure consistent speed across different machines.
+     * @param elapsedTime
+     */
+    public void move (double elapsedTime) {
+        myBouncer.setX(myBouncer.getX() + myVelocity.getX() * elapsedTime);
+        myBouncer.setY(myBouncer.getY() + myVelocity.getY() * elapsedTime);
     }
 
     /**
@@ -55,6 +84,38 @@ public class Bouncer extends Main {
     public void resetBouncer(int width, int height){
         myBouncer.setX(width / 2 - myBouncer.getBoundsInLocal().getWidth() / 2);
         myBouncer.setY(height - 100);
+    }
+
+    /**
+     * If the bouncer at any point hits the paddle, change the direction of the bouncer
+     * to bounce back up towards the bricks
+     * @param myPaddle
+     */
+    public void hitPaddle(Paddle myPaddle){
+        Bounds ivBouncer = myBouncer.getBoundsInParent();
+        Bounds ivPaddle = myPaddle.getView().getBoundsInParent();
+        if(ivBouncer.intersects(ivPaddle)) {
+            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
+        }
+    }
+
+    /**
+     * Boolean method that tells when the ball hits any of the bricks, and then changes direction if it does
+     * @param myBrick
+     * @return true if it hits one of the bricks, false if not
+     */
+    public boolean hitBrick(Brick myBrick){
+        Bounds ivBouncer = myBouncer.getBoundsInParent();
+        Bounds ivBrick1 = myBrick.getView1().getBoundsInParent();
+        Bounds ivBrick2 = myBrick.getView2().getBoundsInParent();
+        Bounds ivBrick3 = myBrick.getView3().getBoundsInParent();
+        Bounds ivBrick4 = myBrick.getView4().getBoundsInParent();
+        if(ivBouncer.intersects(ivBrick1) || ivBouncer.intersects(ivBrick2)
+                || ivBouncer.intersects(ivBrick3) || ivBouncer.intersects(ivBrick4)){
+            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -80,78 +141,6 @@ public class Bouncer extends Main {
     }
 
     /**
-     * Move by taking one step based on its velocity.
-     *
-     * Note, elapsedTime is used to ensure consistent speed across different machines.
-     * @param elapsedTime
-     */
-    public void move (double elapsedTime) {
-        myBouncer.setX(myBouncer.getX() + myVelocity.getX() * elapsedTime);
-        myBouncer.setY(myBouncer.getY() + myVelocity.getY() * elapsedTime);
-    }
-
-    /**
-     * Allows the bouncer to bounce off all of the walls except for the bottom one
-     * @param screenWidth
-     * @param screenHeight
-     */
-    public void bounce (int screenWidth, int screenHeight) {
-        if (myBouncer.getX() < 0 || myBouncer.getX() > screenWidth - myBouncer.getBoundsInLocal().getWidth()) {
-            myVelocity = new Point2D(-myVelocity.getX(), myVelocity.getY());
-        }
-        if (myBouncer.getY() < 30) {
-            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
-        }
-        if (myBouncer.getY() > screenHeight){
-            lives --;
-            resetBouncer(screenWidth, screenHeight);
-        }
-    }
-
-    /**
-     * If the bouncer at any point hits the paddle, change the direction of the bouncer
-     * to bounce back up towards the bricks
-     * @param myPaddle
-     */
-    public void hitPaddle(Paddle myPaddle){
-        Bounds ivBouncer = myBouncer.getBoundsInParent();
-        Bounds ivPaddle = myPaddle.getView().getBoundsInParent();
-        if(ivBouncer.intersects(ivPaddle)) {
-            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
-        }
-    }
-
-    /**
-     * Boolean method that tells when the ball hits any of the bricks, and then changes direction if it does
-     * @param myBrick
-     * @return true if it hits one of the bricks
-     */
-    public boolean hitBrick(Brick myBrick){
-        Bounds ivBouncer = myBouncer.getBoundsInParent();
-        Bounds ivBrick1 = myBrick.getView1().getBoundsInParent();
-        Bounds ivBrick2 = myBrick.getView2().getBoundsInParent();
-        Bounds ivBrick3 = myBrick.getView3().getBoundsInParent();
-        Bounds ivBrick4 = myBrick.getView4().getBoundsInParent();
-        if(ivBouncer.intersects(ivBrick1)){
-            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
-            return true;
-        }
-        else if(ivBouncer.intersects(ivBrick2)){
-            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
-            return true;
-        }
-        else if(ivBouncer.intersects(ivBrick3)){
-            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
-            return true;
-        }
-        else if(ivBouncer.intersects(ivBrick4)){
-            myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Returns internal view of bouncer to interact with other JavaFX methods.
      */
     public ImageView getView () {
@@ -159,7 +148,7 @@ public class Bouncer extends Main {
     }
 
     /**
-     * Returns an "interesting", non-zero random value in the range (min, max)
+     * Returns a non-zero random value in the range (min, max)
      * @param min
      * @param max
      * @return random value
@@ -167,10 +156,4 @@ public class Bouncer extends Main {
     private int getRandomInRange (int min, int max) {
         return min + dice.nextInt(max - min) + 1;
     }
-
-
-
-
-
-
 }
